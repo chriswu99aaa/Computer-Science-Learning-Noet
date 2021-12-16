@@ -1,5 +1,7 @@
 # Computer System a programmer perspective note
 ## 1 A tour of computer system
+### 1.1 All information is bits
+In this section, There is an important quotes I wish to remember: All information, whether stored in disk files, or network contents, is stored as bits.
 
 ## 2 Representing and Multipulating Information
 
