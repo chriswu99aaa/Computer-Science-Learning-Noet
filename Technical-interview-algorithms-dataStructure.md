@@ -100,7 +100,7 @@ public String sort(String s)
 }
 public boolean isPermutation(String str1, Sring str2)
 {
-    if(str1.length() != str2.length) return false;
+    if(str1.length() != str2.length() return false;
     
     return sort(str1).equals(sort(str2));
 }
@@ -140,6 +140,168 @@ If they were a permutation, then all word frequencies must be matched. If there 
 **Conclusion**
 We have done two ways for finding if two given strings are permutations of one another by comparing the sorted strings and counting word frequencies of two 
 strings. The former is simpel and clean and the latter is efficient.
+
+**Note** The idea od 256 size array can also be used to check if a string is a substring of the other by defining an integer array of size 256
+and couting the frequency of the longer string. Then do the character decrement approach as shown above. If there is a negative frequecy then
+the shorter string is not a substring of the other sicne there exist some character in the shorter which don't exist in the longer string.
+
+
+1.4 Write a method to replace all spaces in a string with '%20'. 
+Example:
+Input: "Mr Joghn Smith     "
+Output: "Mr%20John%20Smith"
+
+```
+public void replaceSpace(char[] str, integer length)
+{
+    int space = 0;
+    int new_length;
+    for(char c : str)
+    {
+        if(c == ' ')
+        {
+            space++;
+        }
+    }
+    new_length = length + 2*space;
+    str[new_length] = '\0';  //this symbol makes the string terminate a position of new_length. This is the buffer
+    for(int i=length-1; i>=0; i--)
+    {
+        if(str[i]==' ')
+        {
+            str[new_length-1] = '0';
+            str[new_length-2] = '2';
+            str[new_length-3] = '%';
+            new_length = new_length -3;
+        }else{
+            str[new_length-1] = str[i];
+            new_length = new_length-1;
+        }
+    }
+}
+```
+**Note** A common approach in string manipulation problems is to edit the string starting from the end and work backwords. This is useful because we
+have extra buffer at the end, which allows us to change character without worring about what we're overwriting.
+
+This approache use two scan, first counting the amount of white space to determine the final length of new array and second to edit the char array.
+
+This repalce function example can be extended to editing strings i.e. removing characters from the string, adding characterrs to the string or 
+replacing characters with other characters. We can use this two scan approach.
+
+1.5 Implement a methdo to perform basic sring compression using the counts fo repeated characters. For example abccccaa would become a2b1c5a. If the "compressed" string would not become smaller than the original string, your method should return the original string.
+
+**Easy and bad solution**
+```
+public string compress(String str)
+{
+    String mystr = "";
+    char last = str.charAt(0);
+    int count = 1;
+    for(int i=1; i<str.length(); i++)
+    {
+        if(str.charAt(i) == last)
+            count++;
+        else{
+            mystr += last + "" + count;
+            last = str.charAt(i);
+            count = 1;
+        }
+    }
+    return mystr + last + count;
+}
+```
+**Note** This is slow because string concatenation operates in O(n^2) time.
+
+Alternatively, we can use array to solve this.
+
+```
+public int countCompress(String str)
+{
+    int size = 0;
+    char last = str.charAt(0);
+    count =1;
+    for(int i =1; i<str.length(); i++)
+    {
+        if(str.charAt(i) == last)
+            count++;
+        else{
+            size += 1 + String.valueOf(count).length(); //The char occupies one slot, and the rest is the length of count.
+            count = 1;
+            last = str.charAt(i);
+        }
+    }
+    size = 1 + String.valueOf(count).length();
+    return size ;
+}
+
+public int setChar(char[] array, char c, int index, int count)
+{
+    array[index] = c;
+    index++;
+    char[] c_arr = String.valueOf(count).toCharArray();
+    for(char c : c_arr)
+    {
+        array[index] = c;
+        index;
+    }
+    return index;
+}
+
+public String compress(String str)
+{
+    int size = countCompress(str);
+    if(size > str.length())
+        return str;
+    
+    char[] array = char[size];
+    char last = str.charAt(0);
+    int count = 1;
+    
+    for(int i=1; i<str.length(); i++)
+    {
+        if(str.charAt(i) == last)
+              count++;
+        else{
+            index = setChar(array, last, index, count);
+            last = str.charAt(i);
+            count = 1;
+        }
+    }
+    index = setChar(array, last, index, count);
+    
+    return  String.valueOf(array);
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
