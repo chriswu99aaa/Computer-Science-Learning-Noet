@@ -273,6 +273,41 @@ public String compress(String str)
 }
 ```
 
+1.6 Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes, write a method to rotate the image
+by 90 dgrees. Can you do this in place?
+```
+public void transpose(int[][] A)
+{
+    for(int i=0; i<A.length; i++)
+    {
+        for(int j=i+1; j<A.length; j++)
+        {
+            int tmp = A[i][j];
+            A[i][j] = A[j][i];
+            A[j][i] = tmp;
+        }
+    }
+}
+
+public void swap(int[] A int a, int b)
+{
+    int tmp = A[a];
+    A[a] = A[b];
+    A[b] = tmp;
+}
+
+public void rotateMatrix(int[][] A)
+{
+    A = transpose(A);
+    for(int[] arr:A)
+    {
+        for(int i=0; i<arr.length/2;i++)
+        {
+            swap(arr,i,arr.length-1-i);
+        }
+    }
+}
+```
 
 
 
