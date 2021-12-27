@@ -135,7 +135,7 @@ public boolean isPermutation(String s, String t)
 This alternative approach use the idea of counting each character because there must be an bijection between two strings
 so the amount in the former must be euqal to that of in the latter. So we create an array of size 256, and convert each
 characetr into ascii value and increment the frequency in the integer array at the position corresponding to  the ascii value.
-If they were a permutation, then all word frequencies must be matched. If there is a negative vlaue, then itimplies that there exist a character in the second string which doesn't exist in the first array.
+If they were a permutation, then all word frequencies must be matched. If there is a negative vlaue, then it implies that there exist a character in the second string which doesn't exist in the first array.
 
 **Conclusion**
 We have done two ways for finding if two given strings are permutations of one another by comparing the sorted strings and counting word frequencies of two 
@@ -308,14 +308,70 @@ public void rotateMatrix(int[][] A)
     }
 }
 ```
+**Note** 
+Rotate anti-clockwise will make this swap  first, and then transpose. When manipulating an matrix like multi-dimensional array, we can introduce some intermediate
+steps to approach the final state. Also some Linear algebra knowlege regarding linear transformation can be used.
 
 
+1.7 Write an algorithm such that if an element in an MxN matrix is 9, its entire row and column are set to 0.
+
+1. Scan all places where exist a zero, and store that row and column position into boolean arrays. It's common to store into an MxN array, but at this 
+case we don't care the exat location of zero, but only the row and column information of the zero, so we create two boolean array of size A.length and A[0].length
+2. Set the row and column where boolean arrays has true to be zero.
 
 
+```
+public void setZero(int[][] A)
+{
+    boolean[] row = new boolean[A.length];
+    boolean[] column = new boolean[A[0].length];
+    
+    for(int i=0; i<A.length; i++)
+    {
+        for(int j=0;j<A[0].length; j++)
+        {
+            if(A[i][j] == 0)
+            {
+                row[i] = 0;
+                column[j] = 0;
+            }
+        }
+    }
+    for(int i=0; i<A.length; i++)
+    {
+        for(int j=0; j<A[0].length; j++)
+        {
+            if(row[i] || column[j])
+            {
+                A[i][j] = 0;
+            }
+        }
+    }
+}
+```
+This time complexity is O(n^2) and space complexity is O(N). 
+
+If we were to set some value in multi-dimensional array, we can make another arrays and flag the position where  changes were needed.
+A good example of concerning space is this. We reduce the two dimentional array to be two one dimensinoal arrays reducing space complexity
+from O(MN) to be O(N). This can be done because we don't care the exact location of zero but rather the rows and columns of zeros.
 
 
+1.8 Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if 
+s2 is a rtation of s1 usign only one cal to isSubstring(e.g. "waterbottle" is a rotation of "erbottlewat"
 
-
+```
+public boolean isRotation(Strin s1, String s2)
+{
+    int len = s1.length();
+    
+    if(len == s2.length() && len>0)
+    {
+        String s1s1 = s1 + s1;
+        return isSubstring(s1s1, s2);
+    }
+    return false;
+}
+```
 
 
 
