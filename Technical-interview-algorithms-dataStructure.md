@@ -372,6 +372,103 @@ public boolean isRotation(Strin s1, String s2)
     return false;
 }
 ```
+Longest Substring Without Repeating Characters
+Given a string s, find the length of the longest substring without repeating characters.
+
+Method 1: Brute force approache.
+```
+public int lengthOfLongestSubstring(String s) {
+
+		int n = s.length();
+		int result = 0;
+		for(int i=0; i<n; i++)
+		{
+				for(int j=i; j<n; j++)
+				{
+						if(check(s, i, j))
+						{
+								result = Math.max(result, j-i+1);
+						}
+				}
+		}
+		return result;
+}
+
+private boolean check(String s, int start, int end)
+{
+		int[] chars = new int[128];
+
+		for(int i=start; i<=end; i++)
+		{
+				char c = s.charAt(i);
+				chars[c]++;
+				if(chars[c] >1) return false;
+		}
+		return true;
+}
+```
+The Brute force approach used two pointers one record the start of a substring, and    another record the extending index of a substring. The check method use the direct access table to count the frequency of of characters in the substring from i to j.
+
+This problem is similar to the first problem I have done on CtCi, which asked me to find if allcharacters in a string are unique. This question ask the longest length of a substring which has no repetition. We can rephrase this qeusiton to be the longest substirng in which all characters are unique. This reminds us the direct access table and the method used for checking duplicate.
+
+Method 2: Sliding window approache
+````
+
+    public int lengthOfLongestSubstring(String s) {
+            //sliding window approach
+        int[] chars = new int[128];
+        
+        int left = 0;
+        int right = 0;
+        int result = 0;
+        
+        while(right<s.length()){
+            char r = s.charAt(right);
+            chars[r]++;
+            while(chars[r]>1){//contract the window
+                char l = s.charAt(left);
+                chars[l]--;
+                left++;
+            }
+            result = Math.max(result, right-left+1);
+            
+            right++;
+            
+        }
+        return result;
+    }
+```
+We define a derct access table of size 128, and keep two pointers. left and right within  which we form substrings. We extend the right index until. it reaches the end of the stirng, and we count the frequency of the character occurence in the substring, we one of them is larger than 1, then there is a duplicate, we need to contract the window by move the left pointer to the right and decrement the occurence. Finally, we calculate the maximum of the curent window length by right-left+1 and the previous best.
+
+Method 3: Sliding window optimised
+```
+   public int lengthOfLongestSubstring(String s) {
+            //sliding window approach
+        Integer[] chars = new Integer[128];
+        
+        int left = 0;
+        int right = 0;
+        int result = 0;
+        
+        while(right<s.length()){
+            char r = s.charAt(right);
+            
+            Integer index = chars[r];
+            if(index != null && index>=left && index<right) left = index+1;
+            
+            result = Math.max(result, right-left+1);
+            chars[r] = right;
+            right++;
+            
+        }
+        return result;
+    }
+```
+We change the direct access table from int array to Integer array, by default the former is 0 and the latter is null. If there was a previous visit to the location in Integer Array, the value will not be null, which mean there is a duplicate.
+
+The key understanding is that the integer array will store the index of the character i.e. a = 65 in ascii, chars[a] = chars[6] -> 0. This means that a corresponds to at the position of   65 in the array and the value stored is 0. This creates a mapping.
+
+To clearify, we get the right pointer's character and use this character to access the index corresponding to this character in the integer array. If the inde is not null, it implies that there was a previous visit to this location meaning a duplicate in the substring, and the index of the duplicated character is stored in the integer array, and we increment the index by 1 to contract directly to the targeted position. Then we find the maximum between previous best and the current window right-left+1. Finally, set the index of right for the charcter at the position corresponding to right and increment right.
 
 
 
