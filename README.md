@@ -1,1 +1,1 @@
-# Computer-Science-Learning-Noet
+# Computer-Science-Learning-Note
