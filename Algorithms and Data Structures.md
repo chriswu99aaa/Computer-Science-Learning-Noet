@@ -42,6 +42,49 @@ We can extend the backtracking algorithm to work for such optimisation prblems, 
 
 In addtion to backtracking, branch and bound has a scoring mechanism to always choose the most promising configuration to explore in each iteration.
 
+### Dynamic Programming
+Problems should have   the following property in order to apply dynamic programming
+1. Simple/Similar Problem: We can break the whole problem into subproblems and the subproblems should have similar structure.
+2. Subproblem Optimality: The overall optimal solution can be found by combining optimal solutions of subproblems.
+
+Overlapping Subroblems: Unrelated by same problems contain subproblems in common. **This is the key difference to divide and conquer**
+
+#### Rod cutting problems####
+**Top down with memorization**: We write the program in a narually recursive way, but save the result of each subproblems by an array or a hash table. The procedure first check to see if the subproblem has been previously solved. If so return the solution; otherwise compute and save the answer
+
+**Bottom Up Method**: We solve subproblems with smallest size first   and then sovle problems which depend those subproblems and we save their answers.
+
+```
+Top down with memorisation
+Memorized-cut-rod(p,n)
+    let r[0,,,n] be a new array
+    for i= 0 to n
+        r[i] = -Inf (negatiev infinity)
+    return Memorized-cut-rod-aux(p, n , r)
+    
+Memorized-cut-rod-aux(p,n,r)
+if r[n]>0 
+    return r[n]
+if n==0
+    q = 0
+else
+    for(i = 1 to n)
+        q = max(q, p[i] + Memorized-cut-rod-aux(p, n-i, r)
+r[n] = q
+return q
+```
+```
+Bottom-up-cutrod(p, n)
+    let r[0,,,,n] be a new array
+    r[0] = 0
+    for j = 1 to n
+        q = -Inf
+        for i = 1 to j
+            q = max(q, p[i] + r[j-i])
+        r[j] = q
+    return r[n]
+```
+For both complexity is O(n^2)
 
 
 
