@@ -502,6 +502,102 @@ We keep two pointers, one recording new non-zero element and the slow pointer re
 
 This question is under the category of "array transormation". This categoru is very common in tech interview because it's easy and simle to traverse and represent.
 
+The range of integer of 32-bit integer range is -2^32 to (2^32) -1. When working with integer we need to bear in mind that the range of integer value.
+
+we need to first check appending the digit is safe or not; otherwise handle the underflow     or overflow.
+
+For our checking condition we need to check if the result is smaller than INT_MAX /10 beause we are going to multiply 10 to the result.
+
+There are three cases for integer greater overflow and underflow follow similarly
+1. The resutl is less than INT_MAX = 2^32 / 10, then we are free to add any digit
+2. The result is larger than INT_MAX / 10, then we return INT_MAX
+3. The resutl is equal to INT__MAX / 10, then we further check if the digit is smaller or euqal  INT_MAX mod 10; otherwise it will flow.
+
+For cases one and two, overflow and underflow are the same, but the third case for overflow the digit range is 0-7 wherease underflow the digit range is 0-8 because positive range is 2^32 -1.
+
+Complexity analysis:
+IF N is the number of character in the input string
+* Time complexity O(N)
+* Space complexity O(1)
+
+
+
+We need to implement a function that converts the given string into a signed 32-bit integer.
+Intuitively, we could build the output number out of the input string by iterating over it character by character. However, we stop building the number when a non-digit character is spotted, or the number becomes too large to fit inside a 32-bit signed integer. In the latter case, we need to clamp the result to fit the range.
+
+We will build the integer one character at a time. As we traverse the string from left to right, for each digit character, we will shift all digits in the current integer to the left by one place (this is done by multiplying the integer by 10). Then, we can simply add the current digit to the unit place of the integer. To better understand how this process works, let's look at an example:
+The range of integer of 32-bit integer range is -2^32 to (2^32) -1. When working with integer we need to bear in mind that the range of integer value.
+
+we need to first check appending the digit is safe or not; otherwise handle the underflow     or overflow.
+
+For our checking condition we need to check if the result is smaller than INT_MAX /10 beause we are going to multiply 10 to the result.
+
+There are three cases for integer greater overflow and underflow follow similarly
+1. The resutl is less than INT_MAX = 2^32 / 10, then we are free to add any digit
+2. The result is larger than INT_MAX / 10, then we return INT_MAX
+3. The resutl is equal to INT__MAX / 10, then we further check if the digit is smaller or euqal  INT_MAX mod 10; otherwise it will flow.
+
+For cases one and two, overflow and underflow are the same, but the third case for overflow the digit range is 0-7 wherease underflow the digit range is 0-8 because positive range is 2^32 -1.
+
+Complexity analysis:
+IF N is the number of character in the input string
+* Time complexity O(N)
+* Space complexity O(1)
+
+```
+class Solution {
+    public int myAtoi(String s) 
+    {   
+      
+        int sign = 1;
+        int result = 0;
+        int index = 0;
+        int n = s.length();
+        
+        //discard all spaces from the beginnign of the input string
+        while(index < n && s.charAt(index)==' ')
+            index++;
+        
+        //sign = +1 , if it's positive number, otherwise sign = -1
+        if(index < n && s.charAt(index)== '-')
+        {
+            sign = -1;
+            index++;
+        }else if(index<n && s.charAt(index) == '+')
+        {
+            sign = 1;
+            index++;
+        }
+        
+        //raverse next digits of input and stop if it is not  digit
+        while(index<n && Character.isDigit(s.charAt(index))){
+            
+            //this is to convert the value to the normal integer value, because in ascii                //zero is 48 and the digit might larger than the value
+            int digit = s.charAt(index) - '0';  
+            
+            //check overflow and underflow conditions
+            if((result > Integer.MAX_VALUE / 10) || 
+               (result == Integer.MAX_VALUE/ 10 && digit > Integer.MAX_VALUE % 10))
+            {
+                //handle      under or over  flow depeding on the sign.
+                return sign == 1 ? Integer.MAX_VALUE :Integer.MIN_VALUE;
+            }
+            
+            //append current digit to the result
+            
+            result = 10 * result  + digit;
+            index++;
+        }
+        
+        return sign*result;
+    }
+      
+}
+```
+
+
+
+
 
 
 
