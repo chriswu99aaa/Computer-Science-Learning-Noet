@@ -472,8 +472,35 @@ To clearify, we get the right pointer's character and use this character to acce
 
 
 
+Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+Note that you must do this in-place without making a copy of the array.
 
+Movezero inplace
 
+```
+class Solution {
+    public void moveZeroes(int[] nums) {
+       
+       for(int i=0, j=-1; i<nums.length; i++)
+       {
+           if(nums[i] != 0)
+           {
+               int tmp = nums[i];
+               nums[i] = nums[++j];
+               nums[j] = tmp;
+           }
+       }
+    }
+```
+
+The code maintain the followign invariant
+1. All elements before the slow pointer (lastnonZeroFoundAt) are non-zeroes
+2. All eleemnts vetween the current and slow pointer are zeroes.
+
+**Explanation**
+We keep two pointers, one recording new non-zero element and the slow pointer record the position of a zero element. Whenever a nonzero element   were found, swap the element of both pointers. The slow pointer will always points to a zero element before swaping and points to the lost non zero element in the aray
+
+This question is under the category of "array transormation". This categoru is very common in tech interview because it's easy and simle to traverse and represent.
 
 
 
