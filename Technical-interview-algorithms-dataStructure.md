@@ -412,7 +412,7 @@ The Brute force approach used two pointers one record the start of a substring, 
 This problem is similar to the first problem I have done on CtCi, which asked me to find if allcharacters in a string are unique. This question ask the longest length of a substring which has no repetition. We can rephrase this qeusiton to be the longest substirng in which all characters are unique. This reminds us the direct access table and the method used for checking duplicate.
 
 Method 2: Sliding window approache
-````
+```
 
     public int lengthOfLongestSubstring(String s) {
             //sliding window approach
@@ -595,20 +595,176 @@ class Solution {
 }
 ```
 
+##### Add two Binary Number
+Given two binary strings a and b, return their sum as a binary string.
+
+```
+class Solution {
+    public String addBinary(String a, String b) {
+       int n = a.length();
+        int m = b.length();
+        if(n<m)
+            return addBinary(b,a);
+        
+        int L = Math.max(n,m);
+        
+        StringBuilder sb = new StringBuilder();
+        int carry = 0;
+        int j = m-1;
+        
+        for(int i=L-1; i>-1; --i)
+        {
+            if(a.charAt(i) == '1')
+            {
+                ++carry;
+            }
+                
+            if(j > -1 && b.charAt(j--)=='1')
+            {
+                
+                ++carry;
+            }
+            if(carry % 2 == 1) 
+            {
+                sb.append('1');
+            }
+            else{
+                sb.append('0');
+            }
+            
+            carry /= 2;
+        }
+        
+        if(carry == 1)
+        {
+            sb.append('1');
+        }
+        sb.reverse();
+        
+        return sb.toString();
+    }
+}
+```
+**Explantion**
+This method for adding two binary number and return the binary representation firstly gets the 
+length of string b and string a. We get the max length of a and b. Then we create a string builder.
+Thirdly, we create an int carry of 0 and an int j of m-1;
+
+We loop through two binary string starting from the right. If the first string at position i is 1 then
+we increment the carry(进位）, and then we are assuming a is longer than b, so we need to check if j is larger than -1, i.e. index not out of bound, and if string b at jth position equal 2 then we increment carry by one. After that we check if carry mod 2 is equal to 1, then we append a char 1 to the end of string builder; otherwise, we append char 0 to the end of string builder. After single iteration divide carry by 2.
+
+Finally, we check the final result of carry equal to 1 that is the final carry if there is carry from previous addition, and then reverse the string because we started from the end. 
+
+Bit Manipulation:
+**Note**
+1. and & gives the smaller value of two values
+2. or | gives the larger value of two values
+3. xor ^ exlusive or gives the difference of two values
+4. leftshift << multiply the value by two
+5. rightshift >> divide the value by two
+
+```
+import java.math.BigInteger;
+class Solution {
+  public String addBinary(String a, String b) {
+    BigInteger x = new BigInteger(a, 2);
+    BigInteger y = new BigInteger(b, 2);
+    BigInteger zero = new BigInteger("0", 2);
+    BigInteger carry, answer;
+    while (y.compareTo(zero) != 0) {
+      answer = x.xor(y);
+      carry = x.and(y).shiftLeft(1);
+      x = answer;
+      y = carry;
+    }
+    return x.toString(2);
+  }
+}
+```
+For addding two integers, we start by creating bigintegers of the value in bianry form, we can do in other way but I don't know yet, and create a binary zero in big integer as well as carry and answer.
+
+We use a while loop to process and set the compariom of binary y with binary zero, if they are not equal. This means that while there is still a carry we continue to make bit manipulation. The xor (exlusive or) calculate the difference between two values which will be used as the answer, and the (x.and(y)).shiftLeft(1) find the carry required. We need to remember that the carry is calculated by (x&y) << 1.
+
+
+#### Two sums
+```
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+You can return the answer in any order.
+```
+```
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        int[] result = new int[2];
+         for(int i=0; i<nums.length; i++)
+        {
+            int index = nums[i];
+            int find = target - index;
+            
+            for(int j=i+1; j<nums.length; j++)
+            {
+                if(nums[j] == find)
+                {
+                    
+                    result[0] = i;
+                    result[1] = j;
+                }else{
+                    map.put(nums[j], j);
+                }
+            }
+        }
+        return result;
+    }
+```
+This method is brute force method with time compelxity O(n^2) and space complexity O(n), which is bad if we increate the space complexity. 
+
+```
+public int[] twoSum(int[] nums, int target) {
+	HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+	
+	for(int i=0; i<nums.length; i++){
+		int diff = target - nums[i];
+		if(map.containsKey(diff)){
+			return new int[]{map.get(diff, i};
+		}else{
+			map.put(nums[i], i);
+		}
+	}
+	return null;
+}
+```
+We create a hashmap contains map integer to integer. The former is the element in the array and the latter is the index of the elment in the array.
+We loop through the array and fix the element at position i and check if the difference = target - nums[i] is contained in the key. If it is contained, then
+we get the index of the difference in the map and return that with index i in an array; otherwise, we put the the element and its index into the map.
+THe hashmap technique helps us to remember what we have encountered.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+Remove Duplicate from sorted string
+```
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int index = 0;
+        for(int i=1; i<nums.length; i++)
+        {
+            if(nums[i] != nums[index])
+            {
+                index++;
+                nums[index] = nums[i];
+          
+            }
+        }
+        return ++index;
+    }
+}
+```
+For removing duplicate, I thought the idea of two pointers. One extends for new element and the other keep track of the unique index.
+We create two pointer one index and the other i, starting from 0 and 1 respectively. i starts from 1 because nums[index]] will equal, and this is useless.
+In the for loop we check if element in nums at ith position duplicate with the value at index position. If not equal, we increment index by one, which index will
+be the place the non-duplicate value will be stored.
 
 
 
