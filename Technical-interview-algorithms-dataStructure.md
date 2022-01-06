@@ -438,7 +438,7 @@ Method 2: Sliding window approache
         return result;
     }
 ```
-We define a derct access table of size 128, and keep two pointers. left and right within  which we form substrings. We extend the right index until. it reaches the end of the stirng, and we count the frequency of the character occurence in the substring, we one of them is larger than 1, then there is a duplicate, we need to contract the window by move the left pointer to the right and decrement the occurence. Finally, we calculate the maximum of the curent window length by right-left+1 and the previous best.
+We define a derct access table of size 128, and keep two pointers. left and right within  which we form substrings. We extend the right index until. it reaches the end of the stirng, and we count the frequency of the character occurence in the substring, we one of them is larger than 1, then there is a duplicate, we need to contract the window by the left pointer to the right and decrement the occurence. Finally, we calculate the maximum of the curent window length by right-left+1 and the previous best.
 
 Method 3: Sliding window optimised
 ```
@@ -481,13 +481,14 @@ Movezero inplace
 class Solution {
     public void moveZeroes(int[] nums) {
        
-       for(int i=0, j=-1; i<nums.length; i++)
+       for(int i=0, j=0; i<nums.length; i++)
        {
            if(nums[i] != 0)
            {
                int tmp = nums[i];
-               nums[i] = nums[++j];
+               nums[i] = nums[j];
                nums[j] = tmp;
+	       j++;
            }
        }
     }
@@ -768,46 +769,6 @@ be the place the non-duplicate value will be stored.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
 
 Symbol       Value
@@ -865,7 +826,60 @@ class Solution {
 }
 ```
 
-I got
+Remove Element
+> Given an integer array nums and an integer val, remove all occurrences of val in nums in-place. The relative order of the elements may be changed. Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements. Return k after placing the final result in the first k slots of nums. Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
+
+```
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        int index = 0;
+        for(int i=0; i<nums.length; i++)
+        {
+            if(nums[i] != val)
+            {
+                int tmp = nums[i];
+                nums[i] = nums[index];
+                nums[index]  = tmp;
+                index++;
+            }
+        }
+        return index;
+    }
+}
+```
+Remove element question in array is similar to move zero question finished ealier. We use two pointers one extends new element and another keep record of the
+non targeted string. Start the index from 0 rather copy from other by -1. Use your own style and logic. When we don't find the targeted value we swap with
+the index pointer pointing to the targeted value val. nums[i] will be non-targeted value and we can swap them.
 
 
+Search insert Position
 
+>Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order. You must write an algorithm with O(log n) runtime complexity.
+
+```
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int index, left = 0;
+        int right = nums.length-1;
+        while(left<=right)
+        {
+            index = left + (right-left)/2;
+            if(nums[index] == target) 
+                return index;
+            
+            if(nums[index] < target) 
+                left = index + 1;
+            else
+                right = index -1 ;
+            
+        }
+        return left;
+    }
+}
+```
+Since the array is sorted, this is a good sign of binary search. We record three values in the array, left, right, and index(the middle point)
+The binary search is used in the while loop, we find the middle point of left and right. In this code, we concern about the situation that the array out of bound,
+so we use left + (right-left)/2. This finds the middle point also without overflow. Other things just follow the binary search and if the while loop is broken,
+then the value is not in nums. Here we make left to be index + 1 when nums[index] < target, and make right to be index -1 when nums[index] > target. 
+
+The pointer left is the final position to be inseretd if the value were not in the array. 
