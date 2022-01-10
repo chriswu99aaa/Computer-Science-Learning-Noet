@@ -883,3 +883,60 @@ so we use left + (right-left)/2. This finds the middle point also without overfl
 then the value is not in nums. Here we make left to be index + 1 when nums[index] < target, and make right to be index -1 when nums[index] > target. 
 
 The pointer left is the final position to be inseretd if the value were not in the array. 
+
+
+
+Maximum subarray
+
+>Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum. A subarray is a contiguous part of an array.
+```
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int current_sum = nums[0];
+        int max_sum = nums[0];
+        
+        for(int i=1; i<nums.length; i++)
+        {
+            int current_val = nums[i];
+            
+            current_sum = Math.max(current_val, current_sum + current_val);
+            max_sum = Math.max(current_sum, max_sum);
+        }
+        return max_sum;
+    }
+}
+```
+We create two   variables, current_sum and max_sum which were instantiated by the first value of nums. We loop through the array starting from the second element
+The element at ith position in nums was instantiated as current_val. We are trying to check whether adding the current_val to current_sum the overall sum will be 
+larger or not. We take the current_sum as the max between current_val and current_sum + current_val. Morever, the max_sum will be the max between the current_sum
+and the max_sum.
+
+
+Plus one
+>You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading 0's. Increment the large integer by one and return the resulting array of digits.
+
+```
+class Solution {
+    public int[] plusOne(int[] digits) {
+        
+        int n = digits.length;
+        for(int i=n-1; i>=0; i--)
+        {
+            if(digits[i] == 9)
+            {
+                digits[i] = 0;
+            }else{
+                digits[i]++;
+                return digits;
+            }
+        }
+        
+        digits = new int[digits.length+1];
+        digits[0] = 1;
+        return digits;
+    }
+}
+```
+I came up the for loop part, but the part that instantiatign a new array for digits and set the beginning to 1 was not thought. Instantiating a new array for int
+by default all element were set to zero, and we set the first place to be one , which is what was expected. We reach the end of the for loop without the return
+this means that all elements were set to zero and the else part was not triggered. This is the reason we can do the instantiation. 
